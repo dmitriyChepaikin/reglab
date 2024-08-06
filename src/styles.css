@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'primeicons/primeicons.css';
+@import "primeng/resources/primeng.min.css";
+@import "primeng/resources/themes/soho-light/theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  @apply m-0 p-0 h-full
+}
+
+.main-size {
+  @apply flex justify-center h-[100vh] bg-theme-bg
+}
+
+.asterisk {
+  @apply after:ml-1 after:text-theme-red after:content-['*'];
+}
+
+/*Стили скроллбара*/
+::-webkit-scrollbar {
+  width: 5px;
+  height: 15px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100vh;
+  @apply bg-theme-main-accent-50
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-theme-main-accent-200
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+.border-underline {
+  @apply border-0 border-b border-solid border-theme-main-accent-200
+}
+
+.p-dialog-title, .p-dialog-header-close-icon {
+  @apply text-theme-main-accent-200
+}
+
+
+/*Оверлей*/
+.no-arrow.p-overlaypanel::before,
+.no-arrow.p-overlaypanel::after {
+  display: none;
+}

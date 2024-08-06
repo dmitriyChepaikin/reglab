@@ -1,0 +1,97 @@
+{
+  "users": [
+    {
+      "id": 2,
+      "username": "Alex Petrov",
+      "is_online": true
+    },
+    {
+      "id": 3,
+      "username": "Ivan Ivanov",
+      "is_online": true
+    },
+    {
+      "id": 4,
+      "username": "Maria Ivanova",
+      "is_online": false
+    },
+    {
+      "id": 5,
+      "username": "Alexey Melnik",
+      "is_online": true
+    },
+    {
+      "id": 6,
+      "username": "John Doe",
+      "is_online": false
+    },
+    {
+      "id": 7,
+      "username": "Anna Jonson",
+      "is_online": false
+    },
+    {
+      "id": 8,
+      "username": "Alex Mike",
+      "is_online": true
+    },
+    {
+      "id": 9,
+      "username": "Rick Pirs",
+      "is_online": false
+    },
+    {
+      "id": 10,
+      "username": "Uoren Baffet",
+      "is_online": true
+    }
+  ],
+  "channels": [
+    {
+      "id": 11,
+      "name": "Channel-1"
+    },
+    {
+      "id": 12,
+      "name": "Channel-2"
+    },
+    {
+      "id": 13,
+      "name": "Channel-3"
+    },
+    {
+      "id": 14,
+      "name": "Channel-4"
+    },
+    {
+      "id": 15,
+      "name": "Channel-5"
+    },
+    {
+      "id": 16,
+      "name": "Channel-6"
+    },
+    {
+      "id": 17,
+      "name": "Channel-7"
+    },
+    {
+      "id": 18,
+      "name": "Channel-8"
+    },
+    {
+      "id": 19,
+      "name": "Channel-9"
+    },
+    {
+      "id": 20,
+      "name": "Channel-10"
+    }
+  ],
+  "messages": [
+    {
+      "id": 21,
+      "content": "Channel-10sasdasdasd"
+    }
+  ]
+}
