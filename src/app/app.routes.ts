@@ -4,7 +4,7 @@ import {AuthGuard} from "./guards/auth.guard";
 export const routes: Routes = [
   {
     path: 'login',
-    title: 'Авторизация',
+    title: 'Auth',
     loadComponent: () =>
       import('./pages/login/login.component').then(
         (m) => m.LoginComponent
@@ -12,7 +12,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    title: 'Главная',
+    title: 'Main',
     loadComponent: () =>
       import('./pages/home/home.component').then(
         (m) => m.HomeComponent
@@ -21,7 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'user',
-    title: 'Настройки пользователя',
+    title: 'User settings',
     loadComponent: () =>
       import('./pages/user-profile/user-profile.component').then(
         (m) => m.UserProfileComponent

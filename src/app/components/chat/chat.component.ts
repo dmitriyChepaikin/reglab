@@ -10,6 +10,7 @@ import {ChannelsComponent} from "./chanels/channels.component";
 import {Button} from "primeng/button";
 import {AvatarModule} from "primeng/avatar";
 import {Subject, takeUntil} from "rxjs";
+import {RouterLink} from "@angular/router";
 
 export type ChatType = 'chat' | 'channel'
 export type SelectedChatType = { id: number, type: ChatType }
@@ -22,16 +23,17 @@ export type SelectedChatType = { id: number, type: ChatType }
     UsersComponent,
     ChannelsComponent,
     Button,
-    AvatarModule
+    AvatarModule,
+    RouterLink
   ],
   templateUrl: './chat.component.html',
 })
 export class ChatComponent implements OnDestroy {
-  currentUser: User | null = null;
-  selectedChatId: number | null = null;
-  selectedUserOrChannel: User | Channel | null = null;
+  currentUser: User | null = null
+  selectedChatId: number | null = null
+  selectedUserOrChannel: User | Channel | null = null
 
-  private destroy$ = new Subject<void>();
+  private destroy$ = new Subject<void>()
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -58,7 +60,7 @@ export class ChatComponent implements OnDestroy {
         next: (user) => {
           this.selectedUserOrChannel = user[0];
         }
-      });
+      })
   }
 
   onSelectChannel(id: number) {
@@ -68,20 +70,15 @@ export class ChatComponent implements OnDestroy {
         next: (channel) => {
           this.selectedUserOrChannel = channel[0];
         }
-      });
-  }
-
-  until() {
-    this.destroy$.next();
-    this.destroy$.complete();
+      })
   }
 
   onLogout() {
-    this.authService.logout();
-    this.until()
+    this.authService.logout()
   }
 
   ngOnDestroy() {
-    this.until()
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

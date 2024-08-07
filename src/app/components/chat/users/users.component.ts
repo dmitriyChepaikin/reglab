@@ -1,5 +1,14 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {combineLatest, Observable, startWith} from "rxjs";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+import {combineLatest, Observable, startWith, Subject, takeUntil} from "rxjs";
 import {Store} from "@ngrx/store";
 import {User} from "../../../store/model/user.model";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -36,7 +45,7 @@ interface UserModalVariables {
   templateUrl: './users.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   @Input({required: true}) selectedChatId: number | null = null
   @Output() selectChat = new EventEmitter<SelectedChatType>()
   users$: Observable<User[]>
@@ -47,23 +56,24 @@ export class UsersComponent implements OnInit {
     filteredData: []
   }
 
-  private store = inject(Store);
+  private store = inject(Store)
+  private destroy$ = new Subject<void>()
 
   constructor(private apiService: ApiService) {
-    this.users$ = this.store.select(state => state.users.value);
+    this.users$ = this.store.select(state => state.users.value)
   }
 
   onSelectUser(userId: number) {
-   this.apiService.connectUser(userId).subscribe({
-     next: () => {
-       this.store.dispatch(loadUsers());
-       this.modalVariables =  {
-         visible: false,
-         searchString: new FormControl(''),
-         filteredData: this.modalVariables.filteredData.filter((item) => item.id !== userId)
-       }
-     }
-   })
+    this.apiService.connectUser(userId).subscribe({
+      next: () => {
+        this.store.dispatch(loadUsers())
+        this.modalVariables = {
+          visible: false,
+          searchString: new FormControl(''),
+          filteredData: this.modalVariables.filteredData.filter((item) => item.id !== userId)
+        }
+      }
+    })
   }
 
   onSelectChat(id: number) {
@@ -71,16 +81,22 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadUsers());
-
+    this.store.dispatch(loadUsers())
 
     combineLatest([
       this.apiService.getUsersWithoutCurrentUser(),
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
-    ]).subscribe(([users, searchString]) => {
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([users, searchString]) => {
       this.modalVariables.filteredData = searchString
         ? users.filter(channel => channel.username.toLowerCase().includes(searchString.toLowerCase()))
-        : users;
-    });
+        : users
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

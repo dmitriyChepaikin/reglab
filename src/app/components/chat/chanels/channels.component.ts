@@ -1,5 +1,14 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {combineLatest, Observable, startWith} from "rxjs";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+import {combineLatest, Observable, startWith, Subject, takeUntil} from "rxjs";
 import {Store} from "@ngrx/store";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {Button} from "primeng/button";
@@ -14,7 +23,7 @@ import {loadChannels} from "../../../store/actions/channels.actions";
 import {SelectedChatType} from "../chat.component";
 import {ApiService} from "../../../services/api.service";
 
-interface UserModalVariables {
+interface ChannelModalVariables {
   visible: boolean
   searchString: FormControl<string | null>
   filteredData: Channel[]
@@ -36,21 +45,22 @@ interface UserModalVariables {
   templateUrl: './channels.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChannelsComponent implements OnInit {
+export class ChannelsComponent implements OnInit, OnDestroy {
   @Input({required: true}) selectedChatId: number | null = null
   @Output() selectChat = new EventEmitter<SelectedChatType>()
   channels$: Observable<Channel[]>
 
-  modalVariables: UserModalVariables = {
+  modalVariables: ChannelModalVariables = {
     visible: false,
     searchString: new FormControl(''),
     filteredData: []
   }
 
-  private store = inject(Store);
+  private store = inject(Store)
+  private destroy$ = new Subject<void>()
 
   constructor(private apiService: ApiService) {
-    this.channels$ = this.store.select(state => state.channels.value);
+    this.channels$ = this.store.select(state => state.channels.value)
 
   }
 
@@ -62,8 +72,8 @@ export class ChannelsComponent implements OnInit {
   onSelectChannel(channelId: number) {
     this.apiService.connectUserToChannel(channelId).subscribe({
       next: () => {
-        this.store.dispatch(loadChannels());
-        this.modalVariables =  {
+        this.store.dispatch(loadChannels())
+        this.modalVariables = {
           visible: false,
           searchString: new FormControl(''),
           filteredData: this.modalVariables.filteredData.filter((item) => item.id !== channelId)
@@ -73,16 +83,22 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadChannels());
-
+    this.store.dispatch(loadChannels())
 
     combineLatest([
       this.apiService.getChannelsWithoutCurrentUser(),
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
-    ]).subscribe(([channels, searchString]) => {
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([channels, searchString]) => {
       this.modalVariables.filteredData = searchString
         ? channels.filter(channel => channel.name.toLowerCase().includes(searchString.toLowerCase()))
-        : channels;
-    });
+        : channels
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

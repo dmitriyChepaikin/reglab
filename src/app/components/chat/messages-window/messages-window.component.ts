@@ -1,15 +1,14 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  inject,
   Input,
   OnChanges,
   Renderer2,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {Store} from "@ngrx/store";
 import {ApiService} from "../../../services/api.service";
 import {AvatarModule} from "primeng/avatar";
 import {Button} from "primeng/button";
@@ -21,8 +20,6 @@ import {Channel} from "../../../store/model/channel.model";
 import {Observable, switchMap} from "rxjs";
 import {Message, UserMessage} from "../../../store/model/message.model";
 import {LocalStorageService} from "../../../services/localStorage.service";
-import {loadUsers} from "../../../store/actions/user.actions";
-import {loadChannels} from "../../../store/actions/channels.actions";
 
 
 @Component({
@@ -59,7 +56,7 @@ export class MessagesWindowComponent implements OnChanges {
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
     private localStorageService: LocalStorageService,
-    ) {
+  ) {
     this.currentUserId = this.localStorageService.getUser()?.id || null
   }
 
@@ -81,8 +78,6 @@ export class MessagesWindowComponent implements OnChanges {
 
   sendMessage() {
     const trimmedMsg = this.messageText.trim()
-    console.log(this.channelId )
-    console.log(this.selectedUserOrChannel )
     if (!trimmedMsg || !this.currentUserId || !this.channelId) return
     const message = {
       id: Date.now(),
@@ -153,20 +148,19 @@ export class MessagesWindowComponent implements OnChanges {
     this.messages$
       .pipe(
         switchMap(data => {
-          this.messages = data.messages;
+          this.messages = data.messages
           this.channelId = data.channelId
-          console.log(data.channelId)
           this.cdr.detectChanges()
           this.scrollToBottom()
-          return [];
+          return []
         })
       )
-      .subscribe();
+      .subscribe()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedUserOrChannel'].currentValue !== changes['selectedUserOrChannel'].previousValue) {
-      this.fetchMessages();
+      this.fetchMessages()
     }
   }
 }

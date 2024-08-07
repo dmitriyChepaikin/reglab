@@ -1,4 +1,23 @@
-<div class="profile-container">
-  <h1>User Profile</h1>
-  <!-- Информация о пользователе -->
+<div class="p-6 w-full h-full">
+  <div class="flex flex-col gap-4 p-6 bg-theme-white rounded-lg w-full max-w-2xl h-full">
+    <div class="flex items-center gap-8">
+      <p-button
+        routerLink="/"
+        styleClass="shadow-none font-semibold text-theme-main-accent flex flex-col p-2"
+        [text]="true">
+        <i class="pi pi-angle-left text-xl"></i>
+      </p-button>
+      <div class="text-2xl font-bold text-theme-main-accent">User profile</div>
+    </div>
+    <div class="flex justify-center flex-col gap-4 items-center">
+      <p-avatar
+        shape="circle"
+        icon="pi pi-user"
+        styleClass="w-[160px] h-[160px] [&>span]:text-3xl"
+        size="large">
+      </p-avatar>
+      <span class="text-theme-black text-xl font-bold">{{ currentUser?.username }}</span>
+    </div>
+    <app-user-profile-password-change></app-user-profile-password-change>
+  </div>
 </div>

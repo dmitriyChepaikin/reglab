@@ -1,31 +1,31 @@
 {
   "users": [
     {
-      "id": "1",
+      "id": 1,
       "username": "test",
       "password": "test123",
       "is_online": true
     },
     {
-      "id": "112",
+      "id": 112,
       "username": "user1",
       "password": "pass1",
-      "is_online": true
-    },
-    {
-      "id": "2212",
-      "username": "user2",
-      "password": "pass2",
       "is_online": false
     },
     {
-      "id": "3",
-      "username": "user3",
-      "password": "pass3",
+      "id": 2212,
+      "username": "user2",
+      "password": "pass2",
       "is_online": true
     },
     {
-      "id": "4",
+      "id": 3,
+      "username": "user3",
+      "password": "pass3",
+      "is_online": false
+    },
+    {
+      "id": 4,
       "username": "user4",
       "password": "pass4",
       "is_online": false
@@ -74,6 +74,12 @@
       "id": 1723059577895,
       "from_user": 1,
       "channel_id": "421241",
+      "content": "Hi"
+    },
+    {
+      "id": 1723061790705,
+      "from_user": 1,
+      "channel_id": 22,
       "content": "Hi"
     }
   ],

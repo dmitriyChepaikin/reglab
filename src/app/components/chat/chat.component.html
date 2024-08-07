@@ -5,24 +5,23 @@
         <p-avatar
           shape="circle"
           icon="pi pi-user"
-          styleClass="avatar-cover mr-2"
-          size="large"
-        ></p-avatar>
+          styleClass="mr-2"
+          size="large">
+        </p-avatar>
         <span class="text-theme-black text-xl font-bold">{{ currentUser?.username }}</span>
       </div>
       <div class="flex gap-2">
         <p-button
+          routerLink="/user"
           styleClass="shadow-none font-semibold text-theme-main-accent flex flex-col p-2"
-          [text]="true"
-        >
+          [text]="true">
           <i class="pi pi-cog text-xl"></i>
           <span class='text-xs'>Settings</span>
         </p-button>
         <p-button
           (onClick)="onLogout()"
           styleClass="shadow-none font-semibold text-theme-main-accent flex flex-col p-2"
-          [text]="true"
-        >
+          [text]="true">
           <i class="pi pi-sign-out text-xl"></i>
           <span class='text-xs'>Log Out</span>
         </p-button>
@@ -47,7 +46,7 @@
       [selectedUserOrChannel]="selectedUserOrChannel">
     </app-chat-messages-window>
   } @else {
-    <div class="w-full h-full flex justify-center items-center">
+    <div class="grow w-full bg-theme-white rounded-lg p-6 h-full flex justify-center items-center">
       <span class="text-theme-main-accent-50 text-xl font-semibold"> Select user chat or channel</span>
     </div>
   }

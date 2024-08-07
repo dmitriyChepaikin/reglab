@@ -4,7 +4,7 @@
       <p-avatar
         shape="circle"
         [icon]="'pi ' + (isChannelType(selectedUserOrChannel) ? 'pi-star' : 'pi-user')"
-        styleClass="avatar-cover mr-2"
+        styleClass="mr-2"
         size="large"
       ></p-avatar>
       @if (!isChannelType(selectedUserOrChannel) && !!selectedUserOrChannel?.is_online) {
@@ -36,7 +36,7 @@
             <p-avatar
               shape="circle"
               [icon]="'pi ' + (isChannelType(selectedUserOrChannel) ? 'pi-star' : 'pi-user')"
-              styleClass="avatar-cover mr-2"
+              styleClass="mr-2"
               size="xlarge"
             ></p-avatar>
             @if (!isChannelType(selectedUserOrChannel) && !!selectedUserOrChannel?.is_online) {
@@ -68,7 +68,7 @@
       @if (message.from_user === currentUserId) {
         <!-- Owner message type -->
         <div class="ml-auto mt-4 w-max max-w-[400px] self-end">
-        <div class="text-theme-main-accent-200 text-sm font-semibold">You</div>
+          <div class="text-theme-main-accent-200 text-sm font-semibold">You</div>
           <div class="relative rounded-md rounded-tr-none bg-theme-main-accent py-2 pl-4 pr-8">
               <span class="text-wrap font-semibold text-white custom-text-wrap">
                 {{ message.content }}
@@ -79,9 +79,9 @@
       @if (message.from_user !== currentUserId) {
         <!-- Companion -->
         <div class="mt-4 w-max max-w-[45%] self-start flex flex-col gap-1">
-          @if (message.username || userChatName) {
-            <div class="text-theme-main-accent-200 text-sm font-semibold">{{ (message.username || userChatName) ?? 'Unknown' }}</div>
-          }
+          <div class="text-theme-main-accent-200 text-sm font-semibold">
+            {{ (message.username || userChatName) ?? 'Unknown' }}
+          </div>
           <div class="rounded-md rounded-tl-none bg-[#616161] px-4 py-2">
               <span class="font-semibold text-white custom-text-wrap">
                 {{ message.content }}

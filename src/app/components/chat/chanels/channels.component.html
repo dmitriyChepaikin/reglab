@@ -13,18 +13,21 @@
     <a
       (click)="onSelectChat(channel.id)"
       class="flex items-center gap-4 no-underline cursor-pointer rounded-lg p-2 hover:bg-theme-main-accent-50"
-      [class.bg-theme-main-accent-200]="selectedChatId === channel.id"
-    >
+      [class.bg-theme-main-accent-200]="selectedChatId === channel.id">
       <div>
         <p-avatar
           shape="circle"
           icon="pi pi-star"
-          styleClass="avatar-cover mr-2"
-          size="normal"
-        ></p-avatar>
+          styleClass="mr-2"
+          size="normal">
+        </p-avatar>
       </div>
       <span class="font-semibold">{{ channel.name }}</span>
     </a>
+  } @empty {
+    <div class="w-full h-full flex justify-center items-center">
+      <span class="text-theme-main-accent-50 text-xl font-semibold"> Select a channel </span>
+    </div>
   }
 </div>
 
@@ -51,16 +54,13 @@
 
     <div class="h-56 w-full overflow-scroll">
       @for (channel of modalVariables.filteredData; track channel.id) {
-        <div
-          class="flex items-center justify-between gap-4 rounded-lg p-4"
-        >
+        <div class="flex items-center justify-between gap-4 rounded-lg p-4">
           <span class="font-semibold">{{ channel.name }}</span>
           <p-button
             (onClick)="onSelectChannel(channel.id)"
             styleClass="shadow-none font-semibold text-theme-main-accent"
             [text]="true"
-            label="Select"
-          >
+            label="Select">
           </p-button>
         </div>
       } @empty {
@@ -72,12 +72,11 @@
   </div>
 
   <ng-template pTemplate="footer">
-    <div class="flex justify-end gap-4">
+    <div class="flex justify-end p-2">
       <p-button
         (onClick)="modalVariables.visible = false"
-        styleClass="red-btn"
-        label="Close"
-      ></p-button>
+        label="Close">
+      </p-button>
     </div>
   </ng-template>
 </p-dialog>

@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {Button, ButtonDirective} from "primeng/button";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ButtonDirective} from "primeng/button";
 import {PasswordModule} from "primeng/password";
 import {validateForm} from "../../utils";
 import {InputTextModule} from "primeng/inputtext";
@@ -11,12 +10,9 @@ import {InputTextModule} from "primeng/inputtext";
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule,
-    NgIf,
-    Button,
-    PasswordModule,
     ReactiveFormsModule,
     InputTextModule,
+    PasswordModule,
     ButtonDirective
   ],
   templateUrl: './login.component.html',
