@@ -1,14 +1,13 @@
-import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { AuthService } from './auth.service';
-import { LocalStorageService } from './localStorage.service';
-import {User} from "../store/model/user.model";
+import {TestBed} from '@angular/core/testing';
+import {Router} from '@angular/router';
+import {MessageService} from 'primeng/api';
+import {AuthService} from './auth.service';
+import {LocalStorageService} from './localStorage.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let routerSpy = { navigate: jasmine.createSpy('navigate') };
-  let messageServiceSpy = { add: jasmine.createSpy('add') };
+  let routerSpy = {navigate: jasmine.createSpy('navigate')};
+  let messageServiceSpy = {add: jasmine.createSpy('add')};
   let localStorageServiceSpy = {
     getUser: jasmine.createSpy('getUser'),
     setUser: jasmine.createSpy('setUser'),
@@ -19,9 +18,9 @@ describe('AuthService', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthService,
-        { provide: Router, useValue: routerSpy },
-        { provide: MessageService, useValue: messageServiceSpy },
-        { provide: LocalStorageService, useValue: localStorageServiceSpy }
+        {provide: Router, useValue: routerSpy},
+        {provide: MessageService, useValue: messageServiceSpy},
+        {provide: LocalStorageService, useValue: localStorageServiceSpy}
       ]
     });
     service = TestBed.inject(AuthService);
@@ -43,8 +42,8 @@ describe('AuthService', () => {
         id: 1,
         username: 'test',
         is_online: true
-      });
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+      } as any);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/'] as any);
     });
 
     it('should show error message on failed login', () => {
@@ -54,7 +53,7 @@ describe('AuthService', () => {
         severity: 'error',
         summary: 'Authorization error',
         detail: 'Invalid username or password',
-      });
+      } as any);
     });
   });
 
@@ -71,7 +70,7 @@ describe('AuthService', () => {
       service.logout();
       expect(localStorageServiceSpy.storageClear).toHaveBeenCalled();
       expect(service.isAuthenticated()).toBeFalse();
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/login'] as any);
     });
   });
 });

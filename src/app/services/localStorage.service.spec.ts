@@ -1,7 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-import { LocalStorageService } from './localStorage.service';
-import { User } from '../store/model/user.model';
-import { BehaviorSubject } from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {LocalStorageService} from './localStorage.service';
+import {User} from '../store/model/user.model';
 
 describe('LocalStorageService', () => {
   let service: LocalStorageService;
@@ -26,7 +25,7 @@ describe('LocalStorageService', () => {
 
   describe('#setUser', () => {
     it('should save the user to localStorage and update the userSubject', () => {
-      spyOn(localStorage, 'setItem').and.callThrough();
+      spyOn(localStorage, 'setItem' as any).and.callThrough();
       service.setUser(mockUser);
 
       expect(localStorage.setItem).toHaveBeenCalledWith(service.storageKey, JSON.stringify(mockUser));
@@ -49,7 +48,7 @@ describe('LocalStorageService', () => {
     });
 
     it('should return null and log an error if parsing fails', () => {
-      spyOn(console, 'error');
+      spyOn(console, 'error' as any);
       localStorage.setItem(service.storageKey, 'invalid JSON');
       const user = service.getUser();
       expect(user).toBeNull();
@@ -68,7 +67,7 @@ describe('LocalStorageService', () => {
 
   describe('#storageClear', () => {
     it('should clear the localStorage and set userSubject to null', () => {
-      spyOn(localStorage, 'clear').and.callThrough();
+      spyOn(localStorage, 'clear' as any).and.callThrough();
       service.setUser(mockUser);
       service.storageClear();
 
