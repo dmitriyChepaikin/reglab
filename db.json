@@ -67,8 +67,26 @@
     {
       "id": 1723059246260,
       "from_user": 1,
-      "channel_id": 11,
+      "channel_id": "421241",
       "content": "Hi"
+    },
+    {
+      "id": 17230592462602,
+      "from_user": 4,
+      "channel_id": "421241",
+      "content": "Hi"
+    },
+    {
+      "id": 172305924626012,
+      "from_user": 3,
+      "channel_id": "421241",
+      "content": "Hi"
+    },
+    {
+      "id": 17230592462602325,
+      "from_user": 4,
+      "channel_id": "421241",
+      "content": "How are you?"
     },
     {
       "id": 1723059577895,
