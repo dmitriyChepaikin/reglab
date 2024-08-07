@@ -166,7 +166,7 @@ export class ApiService {
           map((users: User[]) => {
             const messagesWithUserInfo = messages.map(message => ({
               ...message,
-              username: users?.find((user) => user?.id === message.from_user)?.username ?? ''
+              username: users?.find((user) => user?.id == message.from_user)?.username ?? ''
             }));
             return {messages: messagesWithUserInfo, channelId: channelId};
           })
