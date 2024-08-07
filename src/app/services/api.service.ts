@@ -17,7 +17,9 @@ export class ApiService {
   currentUserId: number | null = null
 
   constructor(private http: HttpClient, private localStorageService: LocalStorageService) {
-    this.currentUserId = this.localStorageService.getUser()?.id || null
+    this.localStorageService.getUserObservable().subscribe(user => {
+      this.currentUserId = user?.id || null;
+    });
   }
 
   getChannels(): Observable<Channel[]> {
@@ -109,15 +111,14 @@ export class ApiService {
       switchMap(channelId => {
         if (channelId) {
           return this.http.get<Message[]>(`${this.apiUrl}/messages?channel_id=${channelId}`).pipe(
-            map(messages => ({ messages, channelId }))
+            map(messages => ({messages, channelId}))
           );
         } else {
-          return [{ messages: [], channelId: null }];
+          return [{messages: [], channelId: null}];
         }
       })
     );
   }
-
 
   /** Получение списка каналов, связанных с текущим пользователем */
   getChannelsWithCurrentUser(): Observable<Channel[]> {
@@ -154,7 +155,7 @@ export class ApiService {
       channel_id: channelId
     };
 
-    return  this.http.post<UserChannel>(`${this.apiUrl}/userChannels`, currentUserDataChannel);
+    return this.http.post<UserChannel>(`${this.apiUrl}/userChannels`, currentUserDataChannel);
   }
 
   /** Получение списка сообщений канала */
@@ -162,12 +163,12 @@ export class ApiService {
     return this.http.get<UserMessage[]>(`${this.apiUrl}/messages?channel_id=${channelId}`).pipe(
       switchMap(messages => {
         return this.getUsers().pipe(
-          map((users:User[]) => {
+          map((users: User[]) => {
             const messagesWithUserInfo = messages.map(message => ({
               ...message,
               username: users?.find((user) => user?.id === message.from_user)?.username ?? ''
             }));
-            return { messages: messagesWithUserInfo, channelId: channelId };
+            return {messages: messagesWithUserInfo, channelId: channelId};
           })
         );
       })

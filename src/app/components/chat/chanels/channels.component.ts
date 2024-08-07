@@ -86,7 +86,7 @@ export class ChannelsComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadChannels())
 
     combineLatest([
-      this.apiService.getChannelsWithoutCurrentUser(),
+      this.apiService.getChannelsWithoutCurrentUser().pipe(startWith([])),
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
     ]).pipe(
       takeUntil(this.destroy$)

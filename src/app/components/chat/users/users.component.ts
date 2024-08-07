@@ -84,7 +84,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadUsers())
 
     combineLatest([
-      this.apiService.getUsersWithoutCurrentUser(),
+      this.apiService.getUsersWithoutCurrentUser().pipe(startWith([])),
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
     ]).pipe(
       takeUntil(this.destroy$)
