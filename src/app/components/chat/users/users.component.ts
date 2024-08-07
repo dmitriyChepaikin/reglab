@@ -63,6 +63,7 @@ export class UsersComponent implements OnInit {
       this.users$,
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
     ]).subscribe(([users, searchString]) => {
+      console.log(users)
       this.modalVariables.filteredData = searchString
         ? users.filter(channel => channel.username.toLowerCase().includes(searchString.toLowerCase()))
         : users;
