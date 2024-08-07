@@ -1,0 +1,75 @@
+<div class="flex justify-center items-center h-full">
+  <form
+    (ngSubmit)="onSubmit()"
+    [formGroup]="signInForm"
+    autocomplete="on"
+    class="flex bg-theme-white flex-col gap-4 p-6 rounded-lg max-w-lg w-full"
+  >
+    <h2 class="m-0 mb-2 text-center">
+      Welcome
+    </h2>
+    <div class="flex flex-col gap-2">
+    <span class="p-input-icon-left">
+      <i class="pi pi-user"></i>
+      <input
+        aria-describedby="username"
+        class="w-full text-sm"
+        formControlName="username"
+        pInputText
+        placeholder="Username"
+        type="text"
+      />
+    </span>
+
+      @if (username?.invalid && (username?.dirty)) {
+        @if (username?.errors?.['required']) {
+          <small class="text-theme-red">
+            Username required
+          </small>
+        } @else if (username?.errors?.['minlength']) {
+          <small class="text-theme-red">
+            Username must be at least 4 characters long
+          </small>
+        }
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+    <span class="p-input-icon-left">
+      <i class="pi pi-lock z-20"></i>
+      <p-password
+        [feedback]="false"
+        styleClass="w-full"
+        inputStyleClass="w-full pl-10 text-sm"
+        [toggleMask]="true"
+        aria-describedby="password"
+        formControlName="password"
+        placeholder="Password"
+      />
+    </span>
+
+      @if (password?.invalid && (password?.dirty)) {
+        @if (password?.errors?.['required']) {
+          <small class="text-theme-red">Password required </small>
+        } @else if (password?.errors?.['minlength']) {
+          <small class="text-theme-red">
+            Password must be at least 4 characters longов
+          </small>
+        } @else if (password?.errors?.['maxlength']) {
+          <small class="text-theme-red">
+            The password cannot be more than 20 characters long
+          </small>
+        }
+      }
+    </div>
+    <div class="flex flex-col items-center justify-center gap-3">
+      <button
+        [disabled]="signInForm.invalid"
+        class="w-full"
+        label="Sign In"
+        pButton
+        type="submit"
+      ></button>
+    </div>
+  </form>
+</div>

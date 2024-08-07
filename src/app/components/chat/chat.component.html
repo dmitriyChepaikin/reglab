@@ -1,0 +1,113 @@
+<div class="h-full flex gap-6">
+  <div class="flex flex-col gap-6 p-6 bg-theme-white rounded-lg max-w-sm w-full">
+    <nav class="flex justify-between items-center gap-6 pb-1 border-underline">
+      <div class="flex gap-4 items-center">
+        <p-avatar
+          shape="circle"
+          icon="pi pi-user"
+          styleClass="avatar-cover mr-2"
+          size="large"
+        ></p-avatar>
+        <span class="text-theme-black text-xl font-bold">{{ user?.username }}</span>
+      </div>
+      <div class="flex gap-2">
+        <p-button
+          styleClass="shadow-none font-semibold text-theme-main-accent flex flex-col p-2"
+          [text]="true"
+        >
+          <i class="pi pi-cog text-xl"></i>
+          <span class='text-xs'>Settings</span>
+        </p-button>
+        <p-button
+          (onClick)="onLogout()"
+          styleClass="shadow-none font-semibold text-theme-main-accent flex flex-col p-2"
+          [text]="true"
+        >
+          <i class="pi pi-sign-out text-xl"></i>
+          <span class='text-xs'>Log Out</span>
+        </p-button>
+      </div>
+    </nav>
+    <div class="w-full h-full flex flex-col justify-between gap-6 overflow-hidden">
+      <app-chat-channels
+        class="grow w-full h-fit flex flex-col gap-3 overflow-hidden border-underline"
+        [selectedChatId]="selectedChatId"
+        (selectChat)="onSelectChat($event)">
+      </app-chat-channels>
+      <app-chat-users
+        class="grow w-full h-fit flex flex-col gap-2 overflow-hidden"
+        [selectedChatId]="selectedChatId"
+        (selectChat)="onSelectChat($event)">
+      </app-chat-users>
+    </div>
+  </div>
+  <div class="grow w-full bg-theme-white rounded-lg gap-6 p-6 flex flex-col">
+    @if (selectedUserOrChannel?.id) {
+      <nav class="flex justify-between items-center gap-6 pb-1 border-underline">
+        <div class="flex gap-4 items-center">
+          <div class="relative">
+            <p-avatar
+              shape="circle"
+              [icon]="'pi ' + (isChannelType(selectedUserOrChannel) ? 'pi-star' : 'pi-user')"
+              styleClass="avatar-cover mr-2"
+              size="large"
+            ></p-avatar>
+            @if (!isChannelType(selectedUserOrChannel) && !!selectedUserOrChannel?.is_online) {
+              <div class="rounded-full bg-teal-600 absolute bottom-0 right-2.5 w-3 h-3">
+              </div>
+            }
+          </div>
+          <span class="text-theme-black text-xl font-bold">
+            {{ (isChannelType(selectedUserOrChannel) ? selectedUserOrChannel?.name : selectedUserOrChannel?.username) ?? '' }}
+          </span>
+        </div>
+        <div class="flex gap-2">
+          <p-button
+            (click)="op.toggle($event)"
+            styleClass="shadow-none font-semibold text-theme-main-accent"
+            [text]="true"
+            icon="pi pi-ellipsis-v text-xl"
+          >
+          </p-button>
+
+          <p-overlayPanel #op styleClass="no-arrow">
+            <div class="flex max-w-[300px] flex-col justify-center gap-3 text-center">
+              <div class="flex gap-4 items-center">
+                <div class="relative">
+                  <p-avatar
+                    shape="circle"
+                    [icon]="'pi ' + (isChannelType(selectedUserOrChannel) ? 'pi-star' : 'pi-user')"
+                    styleClass="avatar-cover mr-2"
+                    size="xlarge"
+                  ></p-avatar>
+                  @if (!isChannelType(selectedUserOrChannel) && !!selectedUserOrChannel?.is_online) {
+                    <div class="rounded-full bg-teal-600 absolute bottom-1 right-3 w-3 h-3">
+                    </div>
+                  }
+                </div>
+                <div class="flex flex-col gap-1 text-start">
+                  <div class="font-semibold">
+                    {{ (isChannelType(selectedUserOrChannel) ? selectedUserOrChannel?.name : selectedUserOrChannel?.username) ?? '' }}
+                  </div>
+                </div>
+              </div>
+              <p-button
+                class="mt-3"
+                styleClass="w-full teal-btn"
+                label="Show more"
+              ></p-button>
+            </div>
+          </p-overlayPanel>
+        </div>
+      </nav>
+      <div class="w-full h-full flex flex-col justify-between gap-6 overflow-hidden">
+        <div></div>
+
+      </div>
+    } @else {
+      <div class="w-full h-full flex justify-center items-center">
+        <span class="text-theme-main-accent-50 text-xl font-semibold"> Select user chat or channel</span>
+      </div>
+    }
+  </div>
+</div>
