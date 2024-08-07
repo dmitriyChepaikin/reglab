@@ -2,17 +2,17 @@
   <span class="text-theme-black text-xl font-bold">Channels</span>
   <p-button
     (onClick)="modalVariables.visible = true"
-    styleClass="shadow-none font-semibold text-theme-main-accent"
+    styleClass="shadow-none font-semibold text-theme-main-accent p-2"
     [text]="true"
     icon="pi pi-plus text-base"
   >
   </p-button>
 </div>
-<div class="flex flex-col gap-3 overflow-scroll p-2">
+<div class="h-76 w-full flex flex-col gap-3 overflow-scroll p-2">
   @for (channel of channels$ | async; track channel.id) {
     <a
       (click)="onSelectChat(channel.id)"
-      class="flex items-center gap-4 no-underline cursor-pointer rounded-lg p-4 hover:bg-theme-main-accent-50"
+      class="flex items-center gap-4 no-underline cursor-pointer rounded-lg p-2 hover:bg-theme-main-accent-50"
       [class.bg-theme-main-accent-200]="selectedChatId === channel.id"
     >
       <div>
@@ -41,8 +41,12 @@
   <div class="flex flex-col gap-6 overflow-hidden">
     <p-iconField iconPosition="right" class="w-full">
       <p-inputIcon styleClass="pi pi-search text-theme-main-accent-50"/>
-      <input type="text" pInputText placeholder="Search by username" class="w-full"
-             [formControl]="modalVariables.searchString"/>
+      <input
+        type="text"
+        pInputText
+        placeholder="Search by channel name"
+        class="w-full"
+        [formControl]="modalVariables.searchString"/>
     </p-iconField>
 
     <div class="h-56 w-full overflow-scroll">
@@ -50,12 +54,9 @@
         <div
           class="flex items-center justify-between gap-4 rounded-lg p-4"
         >
-          <div class="flex items-center gap-4">
-            <span></span>
-            <span class="font-semibold">{{ channel.name }}</span>
-          </div>
+          <span class="font-semibold">{{ channel.name }}</span>
           <p-button
-            (onClick)="onSelectChat(channel.id)"
+            (onClick)="onSelectChannel(channel.id)"
             styleClass="shadow-none font-semibold text-theme-main-accent"
             [text]="true"
             label="Select"

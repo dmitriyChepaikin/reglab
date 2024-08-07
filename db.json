@@ -1,29 +1,122 @@
 {
   "users": [
-    { "id": 1, "username": "test", "password": "test123", "is_online": true },
-    { "id": 112, "username": "user1", "password": "pass1", "is_online": true },
-    { "id": 2212, "username": "user2", "password": "pass2", "is_online": false },
-    { "id": 3, "username": "user3", "password": "pass3", "is_online": true },
-    { "id": 4, "username": "user4", "password": "pass4", "is_online": false }
+    {
+      "id": "1",
+      "username": "test",
+      "password": "test123",
+      "is_online": true
+    },
+    {
+      "id": "112",
+      "username": "user1",
+      "password": "pass1",
+      "is_online": true
+    },
+    {
+      "id": "2212",
+      "username": "user2",
+      "password": "pass2",
+      "is_online": false
+    },
+    {
+      "id": "3",
+      "username": "user3",
+      "password": "pass3",
+      "is_online": true
+    },
+    {
+      "id": "4",
+      "username": "user4",
+      "password": "pass4",
+      "is_online": false
+    }
   ],
   "channels": [
-    { "id": 421241, "name": "channel1" },
-    { "id": 53144, "name": "channel2" },
-    { "id": 621313, "name": "channel3" }
+    {
+      "id": "421241",
+      "name": "channel1"
+    },
+    {
+      "id": "53144",
+      "name": "channel2"
+    },
+    {
+      "id": "621313",
+      "name": "channel3"
+    }
   ],
   "messages": [
-    { "id": 124141, "from_user": 112, "channel_id": 11, "content": "Hello in channel1" },
-    { "id": 2412516, "from_user": 2212, "channel_id": 11, "content": "Hi user1" },
-    { "id": 3215262, "from_user": 1, "channel_id": 22, "content": "Hello in channel2" }
+    {
+      "id": "124141",
+      "from_user": 112,
+      "channel_id": 11,
+      "content": "Hello in channel1"
+    },
+    {
+      "id": "2412516",
+      "from_user": 2212,
+      "channel_id": 11,
+      "content": "Hi user1"
+    },
+    {
+      "id": "3215262",
+      "from_user": 1,
+      "channel_id": 22,
+      "content": "Hello in channel2"
+    },
+    {
+      "id": 1723059246260,
+      "from_user": 1,
+      "channel_id": 11,
+      "content": "Hi"
+    },
+    {
+      "id": 1723059577895,
+      "from_user": 1,
+      "channel_id": "421241",
+      "content": "Hi"
+    }
   ],
   "userChannels": [
-    { "user_id": 1, "channel_id": 11 },
-    { "user_id": 1, "channel_id": 22 },
-    { "user_id": 2212, "channel_id": 11 },
-    { "user_id": 3, "channel_id": 22 },
-    { "user_id": 1, "channel_id": 421241 },
-    { "user_id": 1, "channel_id": 621313 },
-    { "user_id": 2212, "channel_id": 621313 },
-    { "user_id": 3, "channel_id": 421241 }
+    {
+      "user_id": 1,
+      "channel_id": 11,
+      "id": "ceaa"
+    },
+    {
+      "user_id": 1,
+      "channel_id": 22,
+      "id": "8bed"
+    },
+    {
+      "user_id": 2212,
+      "channel_id": 11,
+      "id": "73cc"
+    },
+    {
+      "user_id": 3,
+      "channel_id": 22,
+      "id": "62f3"
+    },
+    {
+      "user_id": 1,
+      "channel_id": 421241,
+      "id": "734a"
+    },
+    {
+      "user_id": 1,
+      "channel_id": 621313,
+      "id": "2d9c"
+    },
+    {
+      "user_id": 2212,
+      "channel_id": 621313,
+      "id": "c755"
+    },
+    {
+      "user_id": 3,
+      "channel_id": 421241,
+      "id": "031f"
+    }
   ]
 }

@@ -4,3 +4,5 @@ export type Message = {
   channel_id: number
   content: string
 }
+
+export type UserMessage = Message & { username?: string }

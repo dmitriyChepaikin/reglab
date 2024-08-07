@@ -25,6 +25,8 @@ module.exports = {
         'theme-main-accent': '#7254f3',
         'theme-main-accent-200': 'rgba(114,84,243,0.7)',
         'theme-main-accent-50': 'rgba(114,84,243,0.5)',
+        'theme-main-accent-5': 'rgba(114,84,243,0.05)',
+        'theme-main-accent-15': 'rgba(114,84,243,0.15)',
         'theme-orange': '#D46213',
         'theme-orange-50': '#FFF8F3',
         'theme-red': '#FE5656',

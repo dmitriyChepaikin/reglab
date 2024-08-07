@@ -16,7 +16,7 @@ export class ChannelsEffects {
 
   loadChannels = createEffect(() => this.actions$.pipe(
     ofType(ChannelActions.loadChannels),
-    mergeMap(() => this.apiService.getChannels()
+    mergeMap(() => this.apiService.getChannelsWithCurrentUser()
       .pipe(
         map(value => ChannelActions.loadChannelsSuccess({value})),
         catchError(error => of(ChannelActions.loadChannelsFailure({error})))

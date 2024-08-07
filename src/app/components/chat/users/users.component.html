@@ -2,17 +2,17 @@
   <span class="text-theme-black text-xl font-bold">Users</span>
   <p-button
     (onClick)="modalVariables.visible = true"
-    styleClass="shadow-none font-semibold text-theme-main-accent"
+    styleClass="shadow-none font-semibold text-theme-main-accent p-2"
     [text]="true"
     icon="pi pi-plus text-base"
   >
   </p-button>
 </div>
-<div class="flex flex-col gap-3 overflow-scroll p-2">
+<div class="flex flex-col h-72 gap-3 overflow-scroll p-2">
   @for (user of users$ | async; track user) {
     <a
       (click)="onSelectChat(user.id)"
-      class="flex items-center gap-4 no-underline cursor-pointer rounded-lg p-4 hover:bg-theme-main-accent-50"
+      class="flex items-center gap-4 no-underline cursor-pointer rounded-lg p-2 hover:bg-theme-main-accent-50"
       [class.bg-theme-main-accent-200]="selectedChatId === user.id"
     >
       <div class="relative">
@@ -64,7 +64,7 @@
             <span class="font-semibold">{{ user.username }}</span>
           </div>
           <p-button
-            (onClick)="onSelectChat(user.id)"
+            (onClick)="onSelectUser(user.id)"
             styleClass="shadow-none font-semibold text-theme-main-accent"
             [text]="true"
             label="Select"

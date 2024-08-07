@@ -48,9 +48,12 @@ body {
 }
 
 .p-dialog-title, .p-dialog-header-close-icon {
-  @apply text-theme-main-accent-200
+  @apply text-theme-main-accent
 }
 
+.custom-text-wrap {
+  overflow-wrap: break-word
+}
 
 /*Оверлей*/
 .no-arrow.p-overlaypanel::before,

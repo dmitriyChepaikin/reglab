@@ -12,6 +12,7 @@ import {InputIconModule} from "primeng/inputicon";
 import {InputTextModule} from "primeng/inputtext";
 import {AsyncPipe} from "@angular/common";
 import {SelectedChatType} from "../chat.component";
+import {ApiService} from "../../../services/api.service";
 
 interface UserModalVariables {
   visible: boolean
@@ -48,8 +49,21 @@ export class UsersComponent implements OnInit {
 
   private store = inject(Store);
 
-  constructor() {
+  constructor(private apiService: ApiService) {
     this.users$ = this.store.select(state => state.users.value);
+  }
+
+  onSelectUser(userId: number) {
+   this.apiService.connectUser(userId).subscribe({
+     next: () => {
+       this.store.dispatch(loadUsers());
+       this.modalVariables =  {
+         visible: false,
+         searchString: new FormControl(''),
+         filteredData: this.modalVariables.filteredData.filter((item) => item.id !== userId)
+       }
+     }
+   })
   }
 
   onSelectChat(id: number) {
@@ -59,11 +73,11 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(loadUsers());
 
+
     combineLatest([
-      this.users$,
+      this.apiService.getUsersWithoutCurrentUser(),
       this.modalVariables.searchString.valueChanges.pipe(startWith(''))
     ]).subscribe(([users, searchString]) => {
-      console.log(users)
       this.modalVariables.filteredData = searchString
         ? users.filter(channel => channel.username.toLowerCase().includes(searchString.toLowerCase()))
         : users;

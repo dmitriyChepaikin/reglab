@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {forkJoin, Observable, switchMap} from 'rxjs';
 import {User} from "../store/model/user.model";
-import {Message} from "../store/model/message.model";
+import {Message, UserMessage} from "../store/model/message.model";
 import {Channel} from "../store/model/channel.model";
-import {map, mergeMap} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {LocalStorageService} from "./localStorage.service";
 import {UserChannel} from "../store/model/user-channel.model";
 
@@ -16,7 +16,7 @@ export class ApiService {
 
   currentUserId: number | null = null
 
-  constructor(private http: HttpClient, private localStorageService:LocalStorageService) {
+  constructor(private http: HttpClient, private localStorageService: LocalStorageService) {
     this.currentUserId = this.localStorageService.getUser()?.id || null
   }
 
@@ -28,19 +28,15 @@ export class ApiService {
     return this.http.get<Channel[]>(`${this.apiUrl}/channels`, {params: {id: id}});
   }
 
-  // getUsers(): Observable<User[]> {
-  //   return this.http.get<User[]>(`${this.apiUrl}/users`);
-  // }
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
+  }
+
   getUser(id: number): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`, {params: {id: id}});
   }
 
-  getMessages(): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.apiUrl}/messages`);
-  }
-
-
-  // 1. Получение списка users с которыми есть связь у текущего пользователя
+  /** Получение списка users с которыми есть связь у текущего пользователя*/
   getUsersWithCurrentUser(): Observable<User[]> {
     return this.http.get<UserChannel[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`)
       .pipe(
@@ -65,61 +61,121 @@ export class ApiService {
       );
   }
 
-
-  // 2. Получение списка channels с которыми есть связь у текущего пользователя
-  getChannelsWithCurrentUser(): Observable<Observable<any[]>> {
-    return this.http.get<any[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`)
-      .pipe(
-        map(userChannels => userChannels.map(uc => uc.channel_id)),
-        map(channelIds => this.http.get<any[]>(`${this.apiUrl}/channels?id=${channelIds.join('&id=')}`))
-      );
+  /** Получение списка users с которыми нет связи у текущего пользователя */
+  getUsersWithoutCurrentUser(): Observable<User[]> {
+    return forkJoin({
+      allUsers: this.http.get<User[]>(`${this.apiUrl}/users`),
+      connectedUsers: this.getUsersWithCurrentUser()
+    }).pipe(
+      map(results => {
+        const connectedUserIds = results.connectedUsers.map(user => user.id);
+        return results.allUsers.filter(user => !connectedUserIds.includes(user.id) && user.id != this.currentUserId);
+      })
+    );
   }
 
-  // 3. Добавление нового user в список users
-  addUser(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, user);
+  /** Создание  связи между пользователями */
+  connectUser(userId: number): Observable<UserChannel[]> {
+    const uniqueId = Date.now();
+
+    const connectedUserDataChannel = {
+      user_id: userId,
+      channel_id: uniqueId
+    };
+
+    const currentUserDataChannel = {
+      user_id: this.currentUserId,
+      channel_id: uniqueId
+    };
+
+    const request1 = this.http.post<UserChannel>(`${this.apiUrl}/userChannels`, connectedUserDataChannel);
+    const request2 = this.http.post<UserChannel>(`${this.apiUrl}/userChannels`, currentUserDataChannel);
+
+    return forkJoin([request1, request2]).pipe(
+      map(responses => responses)
+    );
   }
 
-  // 4. Добавление нового channel в список channels
-  addChannel(channel: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/channels`, channel);
+  /** Получение списка сообщений с конкретным user */
+  getMessagesWithUser(userId: number): Observable<{ messages: Message[], channelId: number | null }> {
+    return forkJoin({
+      currentUserChannels: this.http.get<UserChannel[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`),
+      targetUserChannels: this.http.get<UserChannel[]>(`${this.apiUrl}/userChannels?user_id=${userId}`)
+    }).pipe(
+      map(results => {
+        const commonChannel = results.currentUserChannels.find(cu => results.targetUserChannels.some(tu => tu.channel_id === cu.channel_id));
+        return commonChannel ? commonChannel.channel_id : null;
+      }),
+      switchMap(channelId => {
+        if (channelId) {
+          return this.http.get<Message[]>(`${this.apiUrl}/messages?channel_id=${channelId}`).pipe(
+            map(messages => ({ messages, channelId }))
+          );
+        } else {
+          return [{ messages: [], channelId: null }];
+        }
+      })
+    );
   }
 
-  // 5. Получение списка сообщений с конкретным user
-  getMessagesWithUser(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/messages?from_user=${userId}`);
+
+  /** Получение списка каналов, связанных с текущим пользователем */
+  getChannelsWithCurrentUser(): Observable<Channel[]> {
+    return this.http.get<UserChannel[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`).pipe(
+      switchMap(userChannels => {
+        const channelIds = userChannels.map(uc => uc.channel_id);
+        const channelRequests = channelIds.map(channelId => {
+          return this.http.get<Channel>(`${this.apiUrl}/channels?id=${channelId}`);
+        });
+        return forkJoin(channelRequests).pipe(
+          map(channels => channels.flat())
+        );
+      })
+    );
   }
 
-  // 6. Получение списка сообщений с конкретным channel
-  getMessagesWithChannel(channelId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/messages?channel_id=${channelId}`);
+  /** Получение списка каналов, не связанных с текущим пользователем */
+  getChannelsWithoutCurrentUser(): Observable<Channel[]> {
+    return forkJoin({
+      allChannels: this.http.get<Channel[]>(`${this.apiUrl}/channels`),
+      connectedChannels: this.getChannelsWithCurrentUser()
+    }).pipe(
+      map(results => {
+        const connectedChannelIds = results.connectedChannels.map(channel => channel.id);
+        return results.allChannels.filter(channel => !connectedChannelIds.includes(channel.id));
+      })
+    );
   }
 
-  // 7. Отправка нового сообщения с конкретным user
-  sendMessageToUser(message: any): Observable<any> {
+  /** Создание  связи между пользователeм и каналом */
+  connectUserToChannel(channelId: number): Observable<UserChannel> {
+    const currentUserDataChannel = {
+      user_id: this.currentUserId,
+      channel_id: channelId
+    };
+
+    return  this.http.post<UserChannel>(`${this.apiUrl}/userChannels`, currentUserDataChannel);
+  }
+
+  /** Получение списка сообщений канала */
+  getChannelMessages(channelId: number): Observable<{ messages: UserMessage[], channelId: number }> {
+    return this.http.get<UserMessage[]>(`${this.apiUrl}/messages?channel_id=${channelId}`).pipe(
+      switchMap(messages => {
+        return this.getUsers().pipe(
+          map((users:User[]) => {
+            const messagesWithUserInfo = messages.map(message => ({
+              ...message,
+              username: users?.find((user) => user?.id === message.from_user)?.username ?? ''
+            }));
+            return { messages: messagesWithUserInfo, channelId: channelId };
+          })
+        );
+      })
+    )
+  }
+
+  /** Отправка сообщения */
+  sendMessageToChannel(message: Message) {
     return this.http.post(`${this.apiUrl}/messages`, message);
-  }
-
-  // 8. Отправка нового сообщения с конкретным channel
-  sendMessageToChannel(message: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/messages`, message);
-  }
-
-  // 9. Получение списка users с которыми нет связи у текущего пользователя
-  getUsersWithoutCurrentUser(): Observable<Observable<any[]>> {
-    return this.http.get<any[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`)
-      .pipe(
-        map(userChannels => userChannels.map(uc => uc.user_id)),
-        map(userIds => this.http.get<any[]>(`${this.apiUrl}/users?id_ne=${userIds.join('&id_ne=')}`))
-      );
-  }
-
-  // 10. Получение списка channels с которыми нет связи у текущего пользователя
-  getChannelsWithoutCurrentUser(): Observable<Observable<any[]>> {
-    return this.http.get<any[]>(`${this.apiUrl}/userChannels?user_id=${this.currentUserId}`)
-      .pipe(
-        map(userChannels => userChannels.map(uc => uc.channel_id)),
-        map(channelIds => this.http.get<any[]>(`${this.apiUrl}/channels?id_ne=${channelIds.join('&id_ne=')}`))
-      );
   }
 }
