@@ -66,16 +66,16 @@ export class ChatComponent implements OnInit {
     this.messages$ = this.store.select(state => state.messages.messages);
   }
 
-  isChannelType(chat: User | Channel | null ): chat is Channel {
-  return chat !== null && 'name' in chat;
-}
+  isChannelType(chat: User | Channel | null): chat is Channel {
+    return chat !== null && 'name' in chat;
+  }
 
   onSelectChat(item: SelectedChatType) {
     this.selectedChatId = item.id
 
     item.type === 'chat'
-    ? this.onSelectUser(item.id)
-    : this.onSelectChannel(item.id)
+      ? this.onSelectUser(item.id)
+      : this.onSelectChannel(item.id)
 
   }
 
@@ -87,6 +87,7 @@ export class ChatComponent implements OnInit {
       }
     })
   }
+
   onSelectChannel(id: number) {
     this.apiService.getChannel(id).subscribe({
       next: (channel) => {
